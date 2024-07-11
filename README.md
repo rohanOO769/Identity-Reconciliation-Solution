@@ -70,6 +70,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 # Assessment
 ## Deployed link: https://identity-reconciliation-solution-latest.onrender.com
 ### The app the developed in NextJS with Tailwind CSS and uses Jest for Unit Testing
+### Database used: Postgres SQL (https://www.postgresql.org/)
 ### The app is build and containerized using Docker and pushed to the docker hub. Repo link:
 ```bash 
 docker pull rohanoo769/identity_reconciliation_solution:latest
