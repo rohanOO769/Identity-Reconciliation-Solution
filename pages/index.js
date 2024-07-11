@@ -1,67 +1,77 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
+// pages/index.js
+
+import { useState } from 'react';
 
 export default function Home() {
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setResponse(null);
+
+    try {
+      const res = await fetch('/api/identify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, phoneNumber }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await res.json();
+      setResponse(data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError('Error submitting form. Please try again.');
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js</a> on Docker!
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h1 className="text-2xl mb-4">Identify Customer</h1>
+        <div className="mb-4">
+          <label className="block text-gray-700">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mt-1"
+          />
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+        <div className="mb-4">
+          <label className="block text-gray-700">Phone Number</label>
+          <input
+            type="text"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mt-1"
+          />
+        </div>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+          Submit
+        </button>
+        {error && (
+          <div className="mt-4 text-red-500">
+            <h2 className="text-xl">Error:</h2>
+            <p>{error}</p>
+          </div>
+        )}
+        {response && (
+          <div className="mt-4">
+            <h2 className="text-xl">Response:</h2>
+            <pre className="bg-gray-100 p-2 rounded">{JSON.stringify(response, null, 2)}</pre>
+          </div>
+        )}
+      </form>
     </div>
   );
 }
