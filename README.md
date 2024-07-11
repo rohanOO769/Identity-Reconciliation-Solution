@@ -69,3 +69,6 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 # Assessment
 ## Deployed link: https://identity-reconciliation-solution-latest.onrender.com
+The app the developed in NextJS with Tailwind CSS
+The app is build and containerized using Docker and pushed to the docker hub. Repo link:```bash docker pull rohanoo769/identity_reconciliation_solution:latest```
+The app is pulled from the Docker Hub and then deployed using Render (https://render.com/)
